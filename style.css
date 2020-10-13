@@ -2,6 +2,33 @@
     overflow: hidden;
 }
 
+.modal-content {
+    background-color: rgba(0,0,0,0.7);
+    color: white;
+    height: 100%;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+.modal-footer {
+    border-top: none;
+}
+
+.modal-content .close {
+    color: white !important;
+    text-shadow: 0 0px #000;
+    opacity: 0.8;
+    position: relative;
+
+}
+
+.modal-content .close span{
+    position: relative;
+    top: 16px;
+
+}
+
 hr {
     border-top: 1px solid white;
 }
