@@ -1578,8 +1578,54 @@ function showExhibition(){
   if(contentNum === '0' || contentNum === '1' || contentNum === '4' || contentNum === '10')
   {
     document.getElementById('image-'+contentNum).innerHTML = '';
-    $('#image-'+contentNum).load("image/image-"+contentNum+".html"); 
+    //$('#image-'+contentNum).load("image/image-"+contentNum+".html"); 
     document.getElementById ("image-"+contentNum).style.display = 'block';
+
+    
+    //TODO:
+    $('#imageModalBody').load("image/image-"+contentNum+".html", function() {
+      console.log('loaded');
+      console.log(contentNum);
+
+      if(contentNum ==='0')
+      {
+        $("#carouselControls0-1").on('slide.bs.carousel', function(evt) {
+
+          console.log(evt);
+          var step = $(evt.relatedTarget).index();
+        
+          $('#slider_captions-1 .carousel-caption:not(#caption-1-'+step+')').fadeOut('fast', function() {
+              $('#caption-1-'+step).fadeIn();
+          });
+        
+        });
+        $("#carouselControls0-2").on('slide.bs.carousel', function(evt) {
+
+          console.log(evt);
+          var step = $(evt.relatedTarget).index();
+        
+          $('#slider_captions-2 .carousel-caption:not(#caption-2-'+step+')').fadeOut('fast', function() {
+              $('#caption-2-'+step).fadeIn();
+          });
+        
+        });
+      }
+      else
+      {
+        $("#carouselControls"+contentNum).on('slide.bs.carousel', function(evt) {
+
+          console.log(evt);
+          var step = $(evt.relatedTarget).index();
+        
+          $('#slider_captions .carousel-caption:not(#caption-'+step+')').fadeOut('fast', function() {
+              $('#caption-'+step).fadeIn();
+          });
+        
+        });
+      }
+      
+    }); 
+
   }
     
   
@@ -1674,7 +1720,7 @@ function showContent(){
 
     var image = new Image();
     image.addEventListener("load", function() {
-      console.log('loadedloaded img');
+      //console.log('loadedloaded img');
       $('#ref-spinner-'+focusedObject.directoryName).css('display','none');
     }, false);
     let prefix = focusedObject.referencePrefix;
@@ -1737,6 +1783,22 @@ function resizeContent(){
   document.getElementById('info-component').style.height = window.innerHeight - (document.getElementById('pills-tab').getBoundingClientRect().bottom + document.getElementById('pills-tab').getBoundingClientRect().top)-3;
   document.getElementById('image-component').style.height = window.innerHeight - (document.getElementById('pills-tab').getBoundingClientRect().bottom + document.getElementById('pills-tab').getBoundingClientRect().top)-3;
   document.getElementById('pills-video').style.height = window.innerHeight - (document.getElementById('pills-tab').getBoundingClientRect().bottom + document.getElementById('pills-tab').getBoundingClientRect().top)-3;
+
+  let ratio = 1.78;
+  let tabHeight = 0;
+  let padding = 20;
+  let textHeight = 50;
+  if(document.getElementById('imageModalBody').getElementsByClassName('nav-pills').length) tabHeight = 40;
+  let width = (window.innerHeight-tabHeight-padding) * ratio;
+  if(window.innerWidth > width) document.getElementById('imageModalBody').style.width = width;
+  else document.getElementById('imageModalBody').style.width = '100%';
+
+  
+  let height = (window.innerWidth / 1.78) + tabHeight + padding + textHeight;
+  if(window.innerHeight > height) document.getElementById('imageModalContent').style.height = height;
+  else document.getElementById('imageModalContent').style.height = '100%';
+
+  
 }
 
 
@@ -1753,7 +1815,64 @@ $('#pills-tab a[href="#pills-text"]').on('shown.bs.tab', function (e) {
 
 $('#pills-tab a[href="#pills-image"]').on('shown.bs.tab', function (e) {
   //document.getElementById('content-row').style.setProperty("overflow-y", "auto", "important");
-  document.getElementById('image-component').style.height = window.innerHeight - (document.getElementById('pills-tab').getBoundingClientRect().bottom + document.getElementById('pills-tab').getBoundingClientRect().top)-3;
+  //document.getElementById('image-component').style.height = window.innerHeight - (document.getElementById('pills-tab').getBoundingClientRect().bottom + document.getElementById('pills-tab').getBoundingClientRect().top)-3;
+
+  //width / height= 1.78
+  let ratio = 1.78;
+  //ratio = document.getElementById('imageModalBody').offsetWidth / document.getElementById('imageModalBody').offsetHeight;
+  let tabHeight = 0;
+  let padding = 20;
+  let textHeight = 50;
+  if(document.getElementById('imageModalBody').getElementsByClassName('nav-pills').length) tabHeight = 40;
+  let width = (window.innerHeight-tabHeight - padding) * ratio;
+  if(window.innerWidth > width) document.getElementById('imageModalBody').style.width = width;
+  else document.getElementById('imageModalBody').style.width = '100%';
+
+  
+  let height = (window.innerWidth / 1.78) + tabHeight + padding + textHeight;
+  if(window.innerHeight > height) document.getElementById('imageModalContent').style.height = height;
+  else document.getElementById('imageModalContent').style.height = '100%';
+  
+  //TODO
+  $('#imageModal').modal('show');
+
+  
+});
+
+$('#pills-tab a[href="#pills-video"]').on('shown.bs.tab', function (e) {
+
+  /*
+  let ratio = 1.78;
+
+  let tabHeight = 0;
+  let padding = 20;
+  let textHeight = 50;
+  if(document.getElementById('imageModalBody').getElementsByClassName('nav-pills').length) tabHeight = 40;
+  let width = (window.innerHeight-tabHeight - padding) * ratio;
+  if(window.innerWidth > width) document.getElementById('imageModalBody').style.width = width;
+  else document.getElementById('imageModalBody').style.width = '100%';
+
+  
+  let height = (window.innerWidth / 1.78) + tabHeight + padding + textHeight;
+  if(window.innerHeight > height) document.getElementById('imageModalContent').style.height = height;
+  else document.getElementById('imageModalContent').style.height = '100%';
+  */
+  //TODO
+  $('#videoModal').modal('show');
+
+  
+});
+
+$('#imageModal').on('hide.bs.modal', function (e) {
+  //TODO
+  $('#pills-tab a[href="#pills-home"]').tab('show');
+  hideHomeTab();
+});
+
+$('#videoModal').on('hide.bs.modal', function (e) {
+  //TODO
+  $('#pills-tab a[href="#pills-home"]').tab('show');
+  hideHomeTab();
 });
 
 
