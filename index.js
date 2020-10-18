@@ -1528,9 +1528,10 @@ function showExhibition(){
   else
     document.getElementById ("pills-video-tab").style.display = 'none';
   
-  if(contentNum === '0' || contentNum === '4' || contentNum === '10' || contentNum === 'about') // contentNum === '1'
+  if(contentNum === '0' || contentNum === '1' || contentNum === '4' || contentNum === '10' || contentNum === 'about') // contentNum === '1'
   {
     document.getElementById ("pills-text-tab").style.display = 'block';
+    document.getElementById('text-go-up').style.display = 'block';
     if(contentNum === 'about')
     {
       document.getElementById('pills-text-tab').innerHTML = 'About';
@@ -1538,6 +1539,7 @@ function showExhibition(){
     else if(contentNum === '1')
     {
       document.getElementById('pills-text-tab').innerHTML = 'Web';
+      document.getElementById('text-go-up').style.display = 'none';
     }
     else
     {
@@ -1669,7 +1671,7 @@ function showExhibition(){
     
 
   // TEXT
-  if(contentNum === '0' || contentNum === '4' || contentNum === '10' || contentNum === 'about')
+  if(contentNum === '0' || contentNum === '1' || contentNum === '4' || contentNum === '10' || contentNum === 'about')
   {
     document.getElementById('text-'+contentNum).innerHTML = '';
     $('#text-'+contentNum).load("text/text-"+contentNum+".html"); 
