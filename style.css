@@ -4,7 +4,7 @@
 
 .exhibition-label {
     color: rgba( 255, 255, 255, .8 );
-    font-size: 8px;
+    
     font-weight: bold;
     /*font-family: sans-serif;*/
     /*background: rgba( 0, 0, 0, .3 );*/
@@ -15,6 +15,7 @@
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none;
 }
+
 
 .modal-content {
     background-color: rgba(0,0,0,0.3);
@@ -306,6 +307,7 @@ a:hover {
     */
     margin: auto;
     height: 100%;
+    border: 1px solid #222222;
 }
 
 .carousel-control-prev-icon {
@@ -448,6 +450,9 @@ a:hover {
         display: block;
         background-color: black;
     }
+    .exhibition-label {
+        font-size: 10px;
+    }
     /*
     .carousel-item img {
         width: auto !important;
@@ -572,6 +577,9 @@ a:hover {
         display: block;
         background-color: black;
     }
+    .exhibition-label {
+        font-size: 10px;
+    }
     /*
     .carousel-item img {
         width: auto !important;
@@ -694,6 +702,9 @@ a:hover {
         height: auto;
         display: block;
         background-color: black;
+    }
+    .exhibition-label {
+        font-size: 9px;
     }
     /*
 
@@ -836,6 +847,9 @@ a:hover {
         max-height:700px;
         display: block;
         background-color: black;
+    }
+    .exhibition-label {
+        font-size: 9px;
     }
     /*
     .carousel-item img {
@@ -981,6 +995,9 @@ a:hover {
         max-height: 260px;
     }
     */
+    .exhibition-label {
+        font-size: 8px;
+    }
 
     /* 
     ##Device = Low Resolution Tablets, Mobiles (Landscape)
@@ -1127,6 +1144,9 @@ a:hover {
     }
     .carousel-caption p {
         margin-bottom: 0rem !important;
+    }
+    .exhibition-label {
+        font-size: 8px;
     }
     /* 
     ##Device = Most of the Smartphones Mobiles (Portrait)

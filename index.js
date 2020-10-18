@@ -10,7 +10,7 @@ import { CSS2DObject, CSS2DRenderer } from 'https://unpkg.com/three@0.119.1/exam
 import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.min.js';
 
 let existingContents = ['0', '1', '4', '10', 'about'];
-let contentNum = '0';
+var contentNum = '0';
 let isLazy = [true, false, false, false, true, false, false, false, false, false, true];
 
 var isDebug = false;
@@ -287,9 +287,6 @@ class PickHelper {
       focusedObject = this.pickedObject;
       
       document.getElementById('c').getElementsByTagName('canvas')[0].style.pointerEvents = 'none';
-      document.getElementById ("exhibition-label-1").style.opacity = 0.0;
-      document.getElementById ("exhibition-label-4").style.opacity = 0.0;
-      document.getElementById ("exhibition-label-10").style.opacity = 0.0;
 
       destZ = focusedObject.destZ;
       isFocused = true;
@@ -1759,6 +1756,9 @@ function hideExhibition(){
 
 function showContent(){
  
+  document.getElementById ("exhibition-label-1").style.opacity = 0.0;
+  document.getElementById ("exhibition-label-4").style.opacity = 0.0;
+  document.getElementById ("exhibition-label-10").style.opacity = 0.0;
   if(focusedObject)
   {
     document.getElementById ("pills-reference-tab").style.display = 'block';
@@ -1819,7 +1819,7 @@ function showContent(){
     var image = new Image();
     image.addEventListener("load", function() {
       //console.log('loadedloaded img');
-      $('#ref-spinner-'+focusedObject.directoryName).css('display','none');
+      if(focusedObject) $('#ref-spinner-'+focusedObject.directoryName).css('display','none');
     }, false);
     let prefix = focusedObject.referencePrefix;
     if(prefix.length>0) prefix += '-';
@@ -1983,22 +1983,37 @@ $('#pills-tab a[href="#pills-video"]').on('shown.bs.tab', function (e) {
   let videoHeight = (window.innerWidth / videoRatio) + videoTabHeight + padding;
   if(window.innerHeight > videoHeight) document.getElementById('videoModalContent').style.height = videoHeight;
   else document.getElementById('videoModalContent').style.height = '100%';
-  //TODO
+
   $('#videoModal').modal('show');
 
   
 });
 
 $('#imageModal').on('hide.bs.modal', function (e) {
-  //TODO
-  $('#pills-tab a[href="#pills-home"]').tab('show');
-  hideHomeTab();
+
+  if(contentNum === '0')
+  {
+    $('#pills-tab a[href="#pills-info"]').tab('show');
+  }
+  else
+  {
+    $('#pills-tab a[href="#pills-home"]').tab('show');
+    hideHomeTab();
+  }
+  
 });
 
 $('#videoModal').on('hide.bs.modal', function (e) {
-  //TODO
-  $('#pills-tab a[href="#pills-home"]').tab('show');
-  hideHomeTab();
+
+  if(contentNum === '0')
+  {
+    $('#pills-tab a[href="#pills-info"]').tab('show');
+  }
+  else
+  {
+    $('#pills-tab a[href="#pills-home"]').tab('show');
+    hideHomeTab();
+  }
 });
 
 
