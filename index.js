@@ -3,6 +3,7 @@ import { OrbitControls } from 'https://unpkg.com/three@0.119.1/examples/jsm/cont
 //import { OrbitControls } from './jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/RGBELoader.js';
+import { CSS2DObject, CSS2DRenderer } from 'https://unpkg.com/three@0.119.1/examples/jsm/renderers/CSS2DRenderer.js';
 //import {OBJLoader2} from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/OBJLoader2.js';
 //import {MTLLoader} from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/MTLLoader.js';
 //import {MtlObjBridge} from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/obj2/bridge/MtlObjBridge.js';
@@ -15,6 +16,7 @@ let isLazy = [true, false, false, false, true, false, false, false, false, false
 var isDebug = false;
 var container, controls, progressBar, threejsElement;
 var camera, scene, renderer;
+var labelRenderer;
 var bgTexture;
 
 var light;
@@ -245,6 +247,10 @@ class PickHelper {
       document.getElementById ("project-encyclopedia-about").style.opacity = 1.0;
       document.getElementById ("project-encyclopedia").style.opacity = 1.0;
       document.getElementById ("content").style.opacity = 0.0;
+
+      document.getElementById ("exhibition-label-1").style.opacity = 1.0;
+      document.getElementById ("exhibition-label-4").style.opacity = 1.0;
+      document.getElementById ("exhibition-label-10").style.opacity = 1.0;
       
       focusedObject = undefined;
       curFrame = 0;
@@ -281,6 +287,9 @@ class PickHelper {
       focusedObject = this.pickedObject;
       
       document.getElementById('c').getElementsByTagName('canvas')[0].style.pointerEvents = 'none';
+      document.getElementById ("exhibition-label-1").style.opacity = 0.0;
+      document.getElementById ("exhibition-label-4").style.opacity = 0.0;
+      document.getElementById ("exhibition-label-10").style.opacity = 0.0;
 
       destZ = focusedObject.destZ;
       isFocused = true;
@@ -465,7 +474,28 @@ function init() {
           console.log('Object '+i+' Loaded');
         }
         
-        
+        if(planets[i-1].isExhibition)
+        {
+          let labelDiv = document.createElement( 'div' );
+          labelDiv.className = 'exhibition-label';
+          if(i==2)
+          {
+            labelDiv.textContent = 'Mercury Play Back';
+            labelDiv.id = 'exhibition-label-1';
+          }
+          else if(i==4)
+          {
+            labelDiv.textContent = 'Planet 72.82m2';
+            labelDiv.id = 'exhibition-label-4';
+          }
+          
+          labelDiv.style.marginTop = '-1em';
+          var exhibitionLabel = new CSS2DObject( labelDiv );
+          //exhibitionLabel.position.set( 0, Sensor.threeSensorRadius * 1.5, 0 );
+          gltf.scene.add( exhibitionLabel );
+        }
+
+
 
         checkLoadedObjects();
         
@@ -688,6 +718,23 @@ function init() {
           console.log(belt[i-1]);
           console.log('Object 10-'+i+' Loaded');
         }
+
+        if(i==1)
+        {
+          let labelDiv = document.createElement( 'div' );
+          labelDiv.className = 'exhibition-label';
+          labelDiv.id = 'exhibition-label-10';
+
+          labelDiv.textContent = 'About Ground Water Light and Air';
+
+          
+          labelDiv.style.marginTop = '-1em';
+          var exhibitionLabel = new CSS2DObject( labelDiv );
+          //exhibitionLabel.position.set( 0, Sensor.threeSensorRadius * 1.5, 0 );
+          gltf.scene.add( exhibitionLabel );
+        }
+          
+        
         
         
         checkLoadedObjects();
@@ -774,6 +821,15 @@ function init() {
     renderer.toneMappingExposure = 1;
     renderer.outputEncoding = THREE.sRGBEncoding;
     threejsElement = container.appendChild( renderer.domElement );
+
+    labelRenderer = new CSS2DRenderer();
+		labelRenderer.setSize( window.innerWidth, window.innerHeight );
+		labelRenderer.domElement.style.position = 'absolute';
+		labelRenderer.domElement.style.top = '0px';
+		labelRenderer.domElement.style.pointerEvents = 'none';
+    container.appendChild( labelRenderer.domElement );
+    
+
     /*
     renderer.domElement.style.position = 'fixed';
     renderer.domElement.style.left = '0px';
@@ -963,6 +1019,7 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 
   renderer.setSize( window.innerWidth, window.innerHeight );
+  labelRenderer.setSize( window.innerWidth, window.innerHeight );
 
   const canvasAspect = container.clientWidth / container.clientHeight;
   const imageAspect = bgTexture.image ? bgTexture.image.width / bgTexture.image.height : 1;
@@ -1216,6 +1273,7 @@ function render(time) {
     }
 
     renderer.render( scene, camera );
+    labelRenderer.render(scene, camera);
     
   }
   //document.getElementById('c').scrollTo(0,0);
@@ -1491,6 +1549,10 @@ function goBack(){
   document.getElementById ("project-encyclopedia-about").style.opacity = 1.0;
   document.getElementById ("project-encyclopedia").style.opacity = 1.0;
   document.getElementById ("content").style.opacity = 0.0;
+
+  document.getElementById ("exhibition-label-1").style.opacity = 1.0;
+  document.getElementById ("exhibition-label-4").style.opacity = 1.0;
+  document.getElementById ("exhibition-label-10").style.opacity = 1.0;
   
   focusedObject = undefined;
   curFrame = 0;

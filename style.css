@@ -2,6 +2,20 @@
     overflow: hidden;
 }
 
+.exhibition-label {
+    color: rgba( 255, 255, 255, .8 );
+    font-size: 8px;
+    font-weight: bold;
+    /*font-family: sans-serif;*/
+    /*background: rgba( 0, 0, 0, .3 );*/
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+}
+
 .modal-content {
     background-color: rgba(0,0,0,0.3);
     color: white;
