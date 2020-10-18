@@ -20,7 +20,7 @@
     border-top: none;
 }
 
-.modal-content .close {
+.modal .close {
     color: white !important;
     text-shadow: 0 0px #000;
     opacity: 0.8;
@@ -38,6 +38,11 @@
 }
 
 #imageModalBody {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+}
+#videoModalBody {
     padding-top: 10px;
     padding-bottom: 10px;
     width: 100%;

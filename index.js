@@ -8,6 +8,10 @@ import { RGBELoader } from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders
 //import {MtlObjBridge} from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/obj2/bridge/MtlObjBridge.js';
 import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.min.js';
 
+let existingContents = ['0', '1', '4', '10', 'about'];
+let contentNum = '0';
+let isLazy = [true, false, false, false, true, false, false, false, false, false, true];
+
 var isDebug = false;
 var container, controls, progressBar, threejsElement;
 var camera, scene, renderer;
@@ -1503,9 +1507,7 @@ function goBack(){
 
 
 
-let existingContents = ['0', '1', '4', '10', 'about'];
-let contentNum = '0';
-let isLazy = [true, false, false, false, true, false, false, false, false, false, true];
+
 
 function showExhibition(){
 
@@ -1832,6 +1834,19 @@ function resizeContent(){
   if(window.innerHeight > height) document.getElementById('imageModalContent').style.height = height;
   else document.getElementById('imageModalContent').style.height = '100%';
 
+  let videoRatio = 1.33;
+  if(contentNum =='1') videoRatio=1.0;
+  else videoRatio = 1.33;
+  let videoTabHeight = 0;
+  if(document.getElementById('videoModalBody').getElementsByClassName('nav-pills').length) videoTabHeight = 70;
+  let videoWidth = (window.innerHeight-videoTabHeight-padding) * videoRatio;
+  if(window.innerWidth > videoWidth) document.getElementById('videoModalBody').style.width = videoWidth;
+  else document.getElementById('videoModalBody').style.width = '100%';
+
+  
+  let videoHeight = (window.innerWidth / videoRatio) + videoTabHeight + padding;
+  if(window.innerHeight > videoHeight) document.getElementById('videoModalContent').style.height = videoHeight;
+  else document.getElementById('videoModalContent').style.height = '100%';
   
 }
 
@@ -1891,6 +1906,21 @@ $('#pills-tab a[href="#pills-video"]').on('shown.bs.tab', function (e) {
   if(window.innerHeight > height) document.getElementById('imageModalContent').style.height = height;
   else document.getElementById('imageModalContent').style.height = '100%';
   */
+
+  let videoRatio = 1.33;
+  if(contentNum =='1') videoRatio=1.0;
+  else videoRatio = 1.33;
+  let padding = 20;
+  let videoTabHeight = 0;
+  if(document.getElementById('videoModalBody').getElementsByClassName('nav-pills').length) videoTabHeight = 70;
+  let videoWidth = (window.innerHeight-videoTabHeight-padding) * videoRatio;
+  if(window.innerWidth > videoWidth) document.getElementById('videoModalBody').style.width = videoWidth;
+  else document.getElementById('videoModalBody').style.width = '100%';
+
+  
+  let videoHeight = (window.innerWidth / videoRatio) + videoTabHeight + padding;
+  if(window.innerHeight > videoHeight) document.getElementById('videoModalContent').style.height = videoHeight;
+  else document.getElementById('videoModalContent').style.height = '100%';
   //TODO
   $('#videoModal').modal('show');
 
