@@ -4,18 +4,14 @@ import { OrbitControls } from 'https://unpkg.com/three@0.119.1/examples/jsm/cont
 import { GLTFLoader } from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/RGBELoader.js';
 import { CSS2DObject, CSS2DRenderer } from 'https://unpkg.com/three@0.119.1/examples/jsm/renderers/CSS2DRenderer.js';
-import { EffectComposer } from 'https://unpkg.com/three@0.119.1/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'https://unpkg.com/three@0.119.1/examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass } from 'https://unpkg.com/three@0.119.1/examples/jsm/postprocessing/ShaderPass.js';
-import { OutlinePass } from 'https://unpkg.com/three@0.119.1/examples/jsm/postprocessing/OutlinePass.js';
-import { FXAAShader } from 'https://unpkg.com/three@0.119.1/examples/jsm/shaders/FXAAShader.js';
+//import {OBJLoader2} from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/OBJLoader2.js';
+//import {MTLLoader} from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/MTLLoader.js';
+//import {MtlObjBridge} from 'https://unpkg.com/three@0.119.1/examples/jsm/loaders/obj2/bridge/MtlObjBridge.js';
 import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.min.js';
 
 let existingContents = ['0', '1', '4', '10', 'about'];
 var contentNum = '0';
 let isLazy = [true, false, false, false, true, false, false, false, false, false, true];
-
-var composer, effectFXAA, outlinePass;
 
 var isDebug = false;
 var container, controls, progressBar, threejsElement;
@@ -80,8 +76,6 @@ var orbitHeight = 5;
 var orbitLength = orbitHeight * 1.465;
 
 var selectableObjects = [];
-var exhibitionObjects = [];
-var beltObjects = [];
 
 {
 var planets = [];
@@ -225,50 +219,7 @@ class PickHelper {
   {
     this.raycaster = new THREE.Raycaster();
     this.pickedObject = null;
-    this.intersectedObject = null;
     this.pickedObjectSavedColor = 0;
-  }
-
-  checkIntersection() {
-
-    this.raycaster.setFromCamera( pickPosition, camera );
-  
-    var intersectedObjects = this.raycaster.intersectObjects( exhibitionObjects, true );
-  
-    if ( intersectedObjects instanceof Array && intersectedObjects.length > 0 ) {
-
-      // pick the first object. It's the closest one
-      this.intersectedObject = intersectedObjects[0].object;
-
-      while(this.intersectedObject.parent!=null && this.intersectedObject.type!=='Object3D')
-      {
-        this.intersectedObject = this.intersectedObject.parent;
-      }
-
-      while(this.intersectedObject.parent!=null && this.intersectedObject.parent.type=='Object3D')
-      {
-        this.intersectedObject = this.intersectedObject.parent;
-      }
-
-      //console.log(this.intersectedObject);
-  
-      if(this.intersectedObject.isBelt)
-      {
-        outlinePass.selectedObjects = beltObjects;
-      }
-      else
-      {
-        outlinePass.selectedObjects = [this.intersectedObject];
-      }
-      
-  
-    } else {
-  
-      outlinePass.selectedObjects = [];
-      this.intersectedObject = null;
-  
-    }
-  
   }
 
   pick(normalizedPosition, scene, camera, objectArray, _destZ) 
@@ -453,12 +404,11 @@ function init() {
     scene.add(lightImg);
     scene.add(blackScreen);
     scene.add(backgroundImg);
-
-    scene.add(new THREE.AmbientLight(0xffffff, 0.3));
   }
 
 
   
+
 
   new RGBELoader()
     .setDataType( THREE.UnsignedByteType )
@@ -523,7 +473,6 @@ function init() {
         
         if(planets[i-1].isExhibition)
         {
-          exhibitionObjects.push(gltf.scene.children[0]);
           let labelDiv = document.createElement( 'div' );
           labelDiv.className = 'exhibition-label';
           if(i==2)
@@ -761,20 +710,6 @@ function init() {
         belt[i-1].name = beltName;
 
         selectableObjects.push(gltf.scene.children[0]);
-        exhibitionObjects.push(gltf.scene.children[0]);
-
-        let pushableObject = gltf.scene.children[0];
-        while(pushableObject.parent!=null && pushableObject.type!=='Object3D')
-        {
-          pushableObject = pushableObject.parent;
-        }
-
-        while(pushableObject.parent!=null && pushableObject.parent.type=='Object3D')
-        {
-          pushableObject = pushableObject.parent;
-        }
-
-        beltObjects.push(pushableObject);
         if(isDebug)
         {
           console.log(belt[i-1]);
@@ -900,25 +835,6 @@ function init() {
     */
     var pmremGenerator = new THREE.PMREMGenerator( renderer );
     pmremGenerator.compileEquirectangularShader();
-
-    
-    // postprocessing
-
-    composer = new EffectComposer( renderer );
-
-    var renderPass = new RenderPass( scene, camera );
-    composer.addPass( renderPass );
-
-    outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
-    composer.addPass( outlinePass );
-
-    effectFXAA = new ShaderPass( FXAAShader );
-    effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
-    composer.addPass( effectFXAA );
-
-    outlinePass.edgeStrength = 3;
-    outlinePass.visibleEdgeColor.set( '#ffffff' );
-    outlinePass.hiddenEdgeColor.set( '#ffffff' );
   }
   
   // ORBIT CONTROLS
@@ -979,16 +895,9 @@ function init() {
     window.addEventListener('orientationchange', onWindowResize, false);
 
     //window.addEventListener( 'mousemove', onMouseMove, false );
-    //window.addEventListener('mousemove', setPickPosition);
+    window.addEventListener('mousemove', setPickPosition);
     window.addEventListener('mouseout', clearPickPosition);
     window.addEventListener('mouseleave', clearPickPosition);
-
-    renderer.domElement.addEventListener( 'mousemove', function (event) {
-      if ( event.isPrimary === false ) return;
-
-      setPickPosition(event);
-      pickHelper.checkIntersection();
-    }, false );
     
     window.addEventListener('touchstart', (event) => {
       if(allLoaded==true&&isFocused==false)
@@ -1051,8 +960,6 @@ function init() {
   
 }
 
-
-
 function clickObject( event ) {
   if(allLoaded==true&&isFocused==false)
   {
@@ -1109,10 +1016,7 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 
   renderer.setSize( window.innerWidth, window.innerHeight );
-  composer.setSize( window.innerWidth, window.innerHeight )
   labelRenderer.setSize( window.innerWidth, window.innerHeight );
-
-  effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
 
   const canvasAspect = container.clientWidth / container.clientHeight;
   const imageAspect = bgTexture.image ? bgTexture.image.width / bgTexture.image.height : 1;
@@ -1365,8 +1269,7 @@ function render(time) {
       if(useLight) light.intensity = 0;
     }
 
-    //renderer.render( scene, camera );
-    composer.render();
+    renderer.render( scene, camera );
     labelRenderer.render(scene, camera);
     
   }
