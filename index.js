@@ -2005,6 +2005,7 @@ $('#imageModal').on('hide.bs.modal', function (e) {
 
 $('#videoModal').on('hide.bs.modal', function (e) {
 
+  pauseVideos();
   if(contentNum === '0')
   {
     $('#pills-tab a[href="#pills-info"]').tab('show');
